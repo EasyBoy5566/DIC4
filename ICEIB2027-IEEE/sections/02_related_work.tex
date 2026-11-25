@@ -1,0 +1,35 @@
+% =====================================================================
+\section{Related Work}\label{sec:related}
+% =====================================================================
+\subsection{Existing Approaches}
+We group the reviewed literature into three streams, and Table~\ref{tab:summary} summarizes each work's problem limitation, AI method, domain knowledge, dataset, and findings as reported by its authors.
+
+\textit{LLM agents and tool use.} ReAct interleaves reasoning traces with actions on external tools and improves question answering and interactive decision tasks~\cite{yao2023react}; Toolformer shows that language models can learn when to call APIs~\cite{schick2023toolformer}; and retrieval augmentation grounds generation in external documents~\cite{lewis2020rag}. These works motivate tool use for grounding, but their benchmarks do not involve sensor freshness, forecast validity windows, or household appliance states. Hallucination remains a known failure mode of natural-language generation~\cite{ji2023hallucination}, which is why our design checks generated answers against an evidence record.
+
+\textit{Smart-home assistants and ambient sensing.} AdaHome routes each smart-home command either to a simple prompt-based handler or to a lighter reasoning module and learns user preferences from feedback~\cite{lim2026adahome}. AgentSense uses LLM-guided virtual agents in simulated homes to generate ambient sensor data for pre-training activity recognition when real labels are scarce~\cite{leng2025agentsense}. The UCI occupancy study classifies office occupancy from light, temperature, humidity, and CO$_2$ using camera-derived ground truth~\cite{candanedo2016occupancy}. These studies show the value of routing, preferences, and ambient data, but their labels describe commands, activities, or occupancy rather than the air-conditioner or dehumidifier operations in a resident's own room.
+
+\textit{Thermal comfort and humidity knowledge.} ASHRAE Standard~55 defines thermal comfort through six factors~\cite{ashrae55}, and recent practitioner guidance warns against reducing comfort to a single air-temperature value~\cite{mishra2026myths}. The CBE Thermal Comfort Tool computes indices such as PMV/PPD from a full set of inputs~\cite{tartarini2020cbe}. Because RH depends on temperature, dew point is a better indicator of moisture content~\cite{nws_dewpoint,lawrence2005dewpoint}. These sources define what two sensed variables can and cannot support.
+
+\begin{table*}[t]
+\caption{Summary of the reviewed works, as reported by their authors.}
+\label{tab:summary}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{@{}>{\raggedright}p{1.25cm}>{\raggedright}p{0.6cm}>{\raggedright}p{2.75cm}>{\raggedright}p{2.65cm}>{\raggedright}p{2.45cm}>{\raggedright}p{2.55cm}>{\raggedright\arraybackslash}p{3.45cm}@{}}
+\toprule
+Ref. & Year & Problem limitation & AI method & Domain knowledge & Dataset & Findings \\
+\midrule
+\cite{yao2023react} & 2023 & Separation of reasoning and acting in LLMs & Interleaved reasoning traces and tool actions (ReAct) & External tool and environment interaction & QA and interactive decision benchmarks & Improves QA and interactive decision tasks over baselines; no sensor freshness or appliance state \\
+\cite{schick2023toolformer} & 2023 & Unreliable arithmetic and missing up-to-date facts in LLMs & Self-supervised API call learning (Toolformer) & External API call syntax and timing & Web/text and QA benchmarks & Learns when and how to invoke APIs; no household sensing or forecast validity \\
+\cite{lewis2020rag} & 2020 & Static parametric memory without provenance & Retrieval-augmented generation (RAG) & Non-parametric document index & Knowledge-intensive NLP benchmarks & Grounds generation in retrieved text; not designed for live sensor streams \\
+\cite{lim2026adahome} & 2026 & Multi-step LLM overhead on routine home commands & Adaptive command routing with local SLMs and preference feedback & Smart-home command sets and user preferences & Command sets and simulated dialogues & Separates routine routing from heavier reasoning; binary device states, no measured indoor dynamics \\
+\cite{leng2025agentsense} & 2025 & Scarcity of labeled real-home ambient sensor data & LLM-guided virtual agents generating synthetic ambient traces & Household activity routines & Virtual homes and real HAR datasets & Supports HAR pre-training when labels are scarce; targets activities rather than appliance effects \\
+\cite{candanedo2016occupancy} & 2016 & Intrusive sensing for room occupancy detection & Statistical learning classifiers on ambient features & Light, temperature, RH, and CO$_2$ relations & Office sensor logs with camera ground truth & Accurately detects office occupancy; labels occupancy rather than appliance operations \\
+\cite{tartarini2020cbe} & 2020 & Error-prone manual comfort-index computation & Deterministic thermal comfort solver (PMV/PPD) & ASHRAE Standard~55 six-factor model~\cite{ashrae55,mishra2026myths} & User-supplied comfort parameters & Computes standardized comfort metrics; requires full inputs and lacks operation labels \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\subsection{Scope and Research Gap}
+This work limits its scope to single-room temperature--humidity sensing, township-level weather forecasts, advisory recommendations, and human-in-the-loop operation labeling. It does not perform closed-loop appliance control or full six-factor thermal comfort measurement. Table~\ref{tab:comparison} compares the capabilities reported in the reviewed works against the proposed system. None of the reviewed works jointly combines in-room temperature--humidity validation, spatiotemporal forecast alignment, evidence-checked natural-language responses, and bounded time-aligned operation feedback. We target this combination at an explicitly bounded single-room scale and do not claim generality beyond it.

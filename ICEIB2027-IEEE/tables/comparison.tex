@@ -1,0 +1,19 @@
+\begin{table*}[t]
+\caption{Capabilities reported in each reviewed source (qualitative; not measured). ``Not reported'' means the cited source does not state the item; ``--'' means not applicable.}
+\label{tab:comparison}
+\centering
+\footnotesize
+\begin{tabular}{lccccc}
+\toprule
+System & Indoor sensing & Outdoor forecast alignment & Evidence-checked output & Appliance operation labels & Bounded user feedback \\
+\midrule
+ReAct / Toolformer \cite{yao2023react,schick2023toolformer} & No & No & Not reported & No & No \\
+RAG \cite{lewis2020rag} & No & No & Document citations & No & No \\
+AdaHome \cite{lim2026adahome} & Not reported & Not reported & Not reported & Binary command state & Preference feedback \\
+AgentSense \cite{leng2025agentsense} & Simulated & No & Not reported & Activity labels (HAR) & No \\
+UCI Occupancy \cite{candanedo2016occupancy} & Yes (office) & No & -- & Occupancy only & No \\
+CBE Comfort Tool \cite{tartarini2020cbe} & User input & No & Deterministic formula & No & No \\
+\textbf{Proposed Agent} & \textbf{Yes (ESP32)} & \textbf{Yes (CWA)} & \textbf{Yes (Evidence $E$)} & \textbf{Yes (6-class $\mathcal{Y}$)} & \textbf{Yes (Cooldown)} \\
+\bottomrule
+\end{tabular}
+\end{table*}

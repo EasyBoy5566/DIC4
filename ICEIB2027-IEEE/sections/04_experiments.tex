@@ -1,0 +1,35 @@
+% =====================================================================
+\section{Evaluation Plan and Discussion}\label{sec:experiments}
+% =====================================================================
+\subsection{Experimental Setup and Data Collection}
+The planned evaluation instruments one room for approximately two weeks using an ESP32 temperature--humidity node publishing over MQTT to SQLite, combined with hourly CWA township forecast snapshots for the resident's usual destinations, system-triggered operation queries and replies, and proactive operation logs. The UCI occupancy dataset~\cite{candanedo2016occupancy} is used solely to verify the preprocessing and plotting pipeline; its occupancy labels are not used as appliance-operation labels. Because deployment has not yet been executed, no sample sizes, date ranges, or measured values are reported in this paper.
+
+\subsection{Leakage-Free Splitting}
+Adjacent windows of one operation are highly correlated, so samples will be grouped by event and split by time, with later events forming the held-out test set. No event contributes to both training and test sets, all features use only information available at decision time, and all detection and cooldown thresholds are fixed on the training period before the test set is examined (R5).
+
+\subsection{Baseline Comparisons and Evaluation Metrics}
+Table~\ref{tab:eval} defines the three planned comparisons. For \emph{operation identification}, we compare fixed rules against a shallow decision tree and will report per-class event counts, precision, recall, macro-F1, and confusion matrices; \textsc{unk} events will be excluded from training and scoring and reported separately. For \emph{interaction burden}, two query policies will be replayed on the same event stream: a \emph{basic} policy that queries on every candidate sample or event, and the \emph{proposed} policy with event aggregation and cooldown. We will report queries per monitored hour, reply rate (replied / sent), duplicate-query rate (events queried more than once / events queried), and confirmed label yield.
+
+For \emph{answer quality}, a deterministic rule template and the LLM agent will answer the same predefined scenario suite, covering cases such as an appliance already running, indoor--outdoor contrast, laundry drying, API failure, and an expired forecast snapshot. Each scenario specifies required tools, required evidence, and acceptable answers in advance. We will evaluate tool-selection accuracy, evidence-consistency rate, appropriate-clarification rate on missing or stale data, and median / 95th-percentile end-to-end latency. Measured values for these metrics will be reported upon completion of the two-week deployment.
+
+\begin{table}[t]
+\caption{Planned Evaluation Design (Measurements Pending)}
+\label{tab:eval}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}>{\raggedright}p{1.9cm}>{\raggedright}p{2.35cm}>{\raggedright\arraybackslash}p{3.6cm}@{}}
+\toprule
+Question & Comparison & Planned Metrics \\
+\midrule
+Does feedback help identification? & Fixed rules vs.\ decision tree & Events per class, precision, recall, macro-F1, confusion matrix \\
+Can burden be bounded? & Basic query vs.\ aggregation + cooldown & Queries/h, reply rate, duplicate-query rate, confirmed labels \\
+Are answers evidence-based? & Rule template vs.\ LLM agent & Tool-selection accuracy, evidence consistency, appropriate clarification, latency \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\input{tables/comparison}
+
+\subsection{Limitations}
+The planned study covers one room, one sensor, and about two weeks, so its findings will characterize that setting and will not generalize across households or seasons. Temperature and RH alone cannot establish thermal comfort, because air speed, radiant temperature, clothing, and activity are not measured~\cite{ashrae55}; the agent therefore reports these as unmeasured factors. Self-reports may be delayed or uncertain, which is why reply and operation times are stored separately and uncertain replies are kept as unknown. Township forecasts describe a representative point and window rather than the user's exact location~\cite{cwa_township}. Finally, the current system gives advice only and does not control appliances, optimize energy, or predict laundry drying time; these are left for future work.

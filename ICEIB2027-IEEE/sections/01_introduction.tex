@@ -1,0 +1,26 @@
+% =====================================================================
+\section{Introduction}\label{sec:intro}
+% =====================================================================
+\subsection{Background and Motivation}
+A home temperature--humidity sensor answers ``what is the room like now,'' but residents usually need answers to different questions: should the dehumidifier be turned on, is it a good afternoon to dry laundry on the balcony, and will it rain at the destination of a planned outing? The U.S. Environmental Protection Agency recommends keeping indoor RH below 60\%, ideally between 30\% and 50\%~\cite{epa_mold}, yet a single threshold cannot decide an action on its own. Thermal comfort depends on air temperature, mean radiant temperature, humidity, and air speed together with clothing and activity~\cite{ashrae55,mishra2026myths}, and outdoor plans depend on forecasts that the indoor sensor cannot provide.
+
+\subsection{Problem Statement and Research Gap}
+Combining these sources is not straightforward. First, the data are \emph{heterogeneous}: an indoor sensor measures one room at a known instant, whereas a township forecast describes a representative point over a validity window~\cite{cwa_township}. Treating the two as the same kind of observation produces recommendations whose basis cannot be checked. Second, operations are \emph{ambiguous}: air conditioning, dehumidification, opening a window, or simply a rising temperature can all lower RH~\cite{nws_dewpoint}, so a curve alone does not reveal what the resident did. Third, \emph{labels are costly}: asking the resident resolves the ambiguity, but frequent questions are intrusive. A general-purpose LLM assistant does not resolve these issues and may state plausible but unsupported values~\cite{ji2023hallucination}.
+
+As summarized in Table~\ref{tab:summary}, existing tool-using LLM agents, smart-home assistants, ambient occupancy models, and thermal comfort tools each address part of the stack, but none jointly validates in-room temperature--humidity sensing, spatiotemporal forecast alignment, time-aligned appliance-operation labels, and evidence-checked recommendations. This paper addresses two questions:
+\begin{itemize}
+\item \textbf{Q1:} Can an agent select the data that apply to a given room, destination, and time window, and produce recommendations whose every factual element can be traced to a source?
+\item \textbf{Q2:} When the indoor environment changes persistently, how can operation labels be obtained at a controlled query burden, and do they improve operation identification over fixed rules?
+\end{itemize}
+
+\subsection{Research Contributions}
+The main contributions of this work are as follows:
+\begin{itemize}
+\item \textbf{Evidence-traceable eight-module architecture.} Numerical analysis and rule evaluation are performed by deterministic code, while the LLM is confined to intent parsing, constrained tool routing, and explanation, with a template fallback whenever its output disagrees with the evidence.
+\item \textbf{Separated data model and alignment checks.} Indoor measurements, forecast snapshots, user reports, and model inferences are stored separately and checked for quality and spatiotemporal validity so that the agent clarifies or abstains instead of guessing.
+\item \textbf{Bounded event-triggered feedback loop.} Event aggregation and a query cooldown record reply time and operation time separately and keep unanswered queries and mixed operations as distinct labels.
+\item \textbf{Leakage-free evaluation protocol.} We define a reproducible single-room protocol with event-grouped temporal splits for three comparisons: fixed rules versus a decision tree, two feedback policies, and template versus agent responses. Experimental results are not reported in this draft.
+\end{itemize}
+
+\subsection{Paper Organization}
+The first version gives advice only and does not control appliances. Section~\ref{sec:related} reviews related work and identifies the research gap. Section~\ref{sec:method} formalizes the problem and presents the proposed eight-module scheme. Section~\ref{sec:experiments} describes the evaluation plan, comparison table, and limitations, and Section~\ref{sec:conclusion} concludes the paper.

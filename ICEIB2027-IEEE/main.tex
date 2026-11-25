@@ -1,0 +1,77 @@
+% =====================================================================
+%  ICEIB 2027 -- IEEE conference paper (IEEEtran, conference mode)
+%  Compile on Overleaf with pdfLaTeX (default). Bibliography: BibTeX.
+% =====================================================================
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{url}
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta,shapes.geometric,fit,calc}
+
+\graphicspath{{figures/}}
+
+% ---- module tags used in text, figures and algorithms ----
+\newcommand{\M}[1]{M#1}
+
+\algrenewcommand\algorithmicrequire{\textbf{Input:}}
+\algrenewcommand\algorithmicensure{\textbf{Output:}}
+\algnewcommand{\LineComment}[1]{\Statex \hfill\(\triangleright\) #1}
+
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+\begin{document}
+
+\title{An Evidence-Traceable Domain-Specific Agent for Context-Aware Indoor Environmental Management and Outdoor Activity Recommendations}
+
+% ---------------------------------------------------------------------
+% Authors: 高群軒, 鍾易憲, 蕭程勻 (National Chung Hsing University).
+% Replace with the romanized names exactly as they appear in your
+% passports / university records, and fill in department and e-mail.
+% ---------------------------------------------------------------------
+\author{
+\IEEEauthorblockN{First Author}
+\IEEEauthorblockA{\textit{Department Name} \\
+\textit{National Chung Hsing University}\\
+Taichung, Taiwan \\
+first.author@email.nchu.edu.tw}
+\and
+\IEEEauthorblockN{Second Author}
+\IEEEauthorblockA{\textit{Department Name} \\
+\textit{National Chung Hsing University}\\
+Taichung, Taiwan \\
+second.author@email.nchu.edu.tw}
+\and
+\IEEEauthorblockN{Third Author}
+\IEEEauthorblockA{\textit{Department Name} \\
+\textit{National Chung Hsing University}\\
+Taichung, Taiwan \\
+third.author@email.nchu.edu.tw}
+}
+
+\maketitle
+
+\input{sections/00_abstract}
+\input{sections/01_introduction}
+\input{sections/02_related_work}
+\input{sections/03_proposed_scheme}
+\input{sections/04_experiments}
+\input{sections/05_conclusion}
+
+% \section*{Acknowledgment}
+% Acknowledge funding and assistance here.
+
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}
